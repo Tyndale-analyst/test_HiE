@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>내 프로필 - 한국사 오디오북</title>
+    <link rel="icon" type="image/x-icon" href="img/favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=East+Sea+Dokdo&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/mypage.css">
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <img src="img/text_logo.png" alt="한국사 오디오북" class="header-logo" onclick="window.location.href='index.html'" style="cursor: pointer;">
+        </div>
+        <div class="header-center">
+            <h1 id="pageTitle">마이페이지</h1>
+        </div>
+        <div class="header-right">
+            <button class="nav-button" id="wordbookButton" aria-label="단어장" onclick="window.location.href='wordbook.html'">
+                <span>📚</span>
+            </button>
+            <button class="nav-button" id="targetButton" aria-label="과녁판" onclick="window.location.href='arrow.html'">
+                <span>🎯</span>
+            </button>
+            <button class="mypage-button" id="mypageButton" aria-label="마이페이지" onclick="window.location.href='mypage.html'">
+                <span>👤</span>
+            </button>
+            <button class="theme-toggle" id="themeToggle" aria-label="테마 변경">
+                <span id="themeIcon">🌙</span>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <!-- 현재 듣고 있는 책 섹션 -->
+        <div class="current-book-section">
+            <div class="section-header">
+                <h2>프로필</h2>
+            </div>
+            <div class="main-content-wrapper">
+                <!-- 프로필 섹션 -->
+                <div class="profile-section">
+                    <div class="profile-avatar">
+                        <img src="img/profile.png" alt="프로필 아바타" class="avatar-image">
+                    </div>
+                    <div class="profile-info">
+                        <div class="nickname">귀여운 드미</div>
+                    </div>
+                </div>
+                
+                <!-- 현재 책 정보 -->
+                <div class="current-book-card">
+                    <div class="book-info">
+                        <div class="current-book-header">현재 읽고 있는 책</div>
+                        <div class="book-title-container">
+                            <div class="book-title">장수왕</div>
+                            <button class="continue-reading-btn">이어서 보기 ➤</button>
+                        </div>
+                        <div class="book-description">
+                            장수왕은 고구려의 영광기를 이끈 탁월한 왕으로, 
+                            남진 정책을 통해 세력을 크게 확장했습니다.
+                        </div>
+                        <div class="progress-container">
+                            <div class="progress-label">18 / 63</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 34%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="book-character">
+                        <img src="img/jangsu.png" alt="장수왕" class="character-image">
+                        <img src="img/record.png" alt="레코드" class="record-image">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 단어장 섹션 -->
+        <div class="vocabulary-section">
+            <div class="section-header">
+                <h2>단어장</h2>
+                <button class="section-button" onclick="window.location.href='arrow.html'">더보기 ➤</button>
+            </div>
+            <div class="vocabulary-grid">
+                <div class="vocab-card">
+                    <div class="vocab-content">
+                        <div class="vocab-english">praise</div>
+                        <div class="vocab-korean">칭찬하다</div>
+                    </div>
+                </div>
+                <div class="vocab-card">
+                    <div class="vocab-content">
+                        <div class="vocab-english">brave</div>
+                        <div class="vocab-korean">용감한</div>
+                    </div>
+                </div>
+                <div class="vocab-card">
+                    <div class="vocab-content">
+                        <div class="vocab-english">castle</div>
+                        <div class="vocab-korean">성</div>
+                    </div>
+                </div>
+                <div class="vocab-card">
+                    <div class="vocab-content">
+                        <div class="vocab-english">sword</div>
+                        <div class="vocab-korean">검</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 오디오북 컬렉션 섹션 -->
+        <div class="audiobook-collection">
+            <div class="section-header">
+                <h2>오디오북 컬렉션 기록</h2>
+                <button class="section-button" onclick="window.location.href='index.html'">더보기 ➤</button>
+            </div>
+            <div class="audiobook-grid">
+                <div class="audiobook-item">
+                    <div class="audiobook-thumbnail">
+                        <img src="img/jumong.png" alt="주몽 설화">
+                    </div>
+                    <div class="audiobook-info">
+                        <div class="audiobook-title">주몽 설화</div>
+                        <div class="audiobook-category">고구려 건국 설화</div>
+                        <div class="audiobook-description">고구려 건국 영웅 주몽의 탄생부터 건국까지의 장대한 이야기입니다.</div>
+                    </div>
+                </div>
+                <div class="audiobook-item">
+                    <div class="audiobook-thumbnail">
+                        <img src="img/jangsu.png" alt="장수왕">
+                    </div>
+                    <div class="audiobook-info">
+                        <div class="audiobook-title">장수왕</div>
+                        <div class="audiobook-category">고구려 중흥</div>
+                        <div class="audiobook-description">장수왕의 남진 정책과 평양 천도로 고구려 영광을 재현한 이야기입니다.</div>
+                    </div>
+                </div>
+                <div class="audiobook-item">
+                    <div class="audiobook-thumbnail">
+                        <img src="img/eulji.png" alt="을지문덕">
+                    </div>
+                    <div class="audiobook-info">
+                        <div class="audiobook-title">을지문덕</div>
+                        <div class="audiobook-category">고구려 영웅</div>
+                        <div class="audiobook-description">살수대첩에서 수나라 대군을 물리친 을지문덕의 지략과 용기를 그렸습니다.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 페이지 하단 정보 -->
+        <div class="page-footer">
+            <div class="footer-links">
+                <a href="#" class="footer-link">개인정보 보호</a>
+                <a href="#" class="footer-link">이용 약관</a>
+                <a href="#" class="footer-link">건의사항 및 신고</a>
+            </div>
+            <div class="footer-logo">
+                <span class="logo-text">History in English</span>
+            </div>
+            <div class="footer-copyright">
+                © 2025 KOsuji SUNGeunji SHINsanggyu LIMeunhee
+            </div>
+        </div>
+    </main>
+
+    <script src="js/mypage.js"></script>
+</body>
+</html> 

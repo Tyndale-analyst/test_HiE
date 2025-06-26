@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>단어장</title>
+    <link rel="icon" type="image/x-icon" href="img/favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="css/wordbook.css">
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <img src="img/text_logo.png" alt="한국사 오디오북" class="header-logo" onclick="window.location.href='index.html'" style="cursor: pointer;">
+        </div>
+        <div class="header-center">
+            <h1 id="pageTitle">단어장</h1>
+        </div>
+        <div class="header-right">
+            <button class="nav-button" id="wordbookButton" aria-label="단어장" onclick="window.location.href='wordbook.html'">
+                <span>📚</span>
+            </button>
+            <button class="nav-button" id="targetButton" aria-label="과녁판" onclick="window.location.href='arrow.html'">
+                <span>🎯</span>
+            </button>
+            <button class="mypage-button" id="mypageButton" aria-label="마이페이지" onclick="window.location.href='mypage.html'">
+                <span>👤</span>
+            </button>
+            <button class="theme-toggle" id="themeToggle" aria-label="테마 변경">
+                <span id="themeIcon">🌙</span>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <!-- 단어장 헤더 -->
+        <div class="wordbook-header">
+            <h2 class="wordbook-title">Vocabulary</h2>
+        </div>
+
+        <!-- 정렬 버튼들 -->
+        <div class="sort-buttons-container">
+            <button class="sort-btn active" data-sort="abc">ABC순 정렬</button>
+            <button class="sort-btn" data-sort="korean">가나다순 정렬</button>
+            <button class="sort-btn" data-sort="recent">최근순 정렬</button>
+            <button class="sort-btn" data-sort="oldest">오래된순 정렬</button>
+        </div>
+
+        <!-- 단어 카드 그리드 -->
+        <div class="word-cards-container">
+            <!-- 첫 번째 줄 카드들 (항상 표시) -->
+            <div class="first-row-cards">
+                <div class="word-card mountain">
+                    <div class="card-content">
+                        <h3 class="english-word">Mountain</h3>
+                        <p class="korean-word">산</p>
+                    </div>
+                </div>
+
+                <div class="word-card sky">
+                    <div class="card-content">
+                        <h3 class="english-word">Sky</h3>
+                        <p class="korean-word">하늘</p>
+                    </div>
+                </div>
+
+                <div class="word-card tree">
+                    <div class="card-content">
+                        <h3 class="english-word">Tree</h3>
+                        <p class="korean-word">나무</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 더보기 버튼 -->
+            <div class="show-more-container">
+                <button class="show-more-btn" id="showMoreBtn">
+                    <span class="btn-text">더보기</span>
+                    <span class="btn-icon">▼</span>
+                </button>
+            </div>
+
+            <!-- 나머지 카드들 (숨겨짐) -->
+            <div class="remaining-cards" id="remainingCards">
+                <div class="word-card bird">
+                    <div class="card-content">
+                        <h3 class="english-word">Bird</h3>
+                        <p class="korean-word">새</p>
+                    </div>
+                </div>
+
+                <div class="word-card rice">
+                    <div class="card-content">
+                        <h3 class="english-word">Rice</h3>
+                        <p class="korean-word">쌀</p>
+                    </div>
+                </div>
+
+                <div class="word-card cave">
+                    <div class="card-content">
+                        <h3 class="english-word">Cave</h3>
+                        <p class="korean-word">동굴</p>
+                    </div>
+                </div>
+
+                <div class="word-card bear">
+                    <div class="card-content">
+                        <h3 class="english-word">Bear</h3>
+                        <p class="korean-word">곰</p>
+                    </div>
+                </div>
+
+                <div class="word-card river">
+                    <div class="card-content">
+                        <h3 class="english-word">River</h3>
+                        <p class="korean-word">강</p>
+                    </div>
+                </div>
+
+                <div class="word-card battle">
+                    <div class="card-content">
+                        <h3 class="english-word">Battle</h3>
+                        <p class="korean-word">전투</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 페이지 하단 정보 -->
+        <div class="page-footer">
+            <div class="footer-links">
+                <a href="#" class="footer-link">개인정보 보호</a>
+                <a href="#" class="footer-link">이용 약관</a>
+                <a href="#" class="footer-link">건의사항 및 신고</a>
+            </div>
+            <div class="footer-logo">
+                <span class="logo-text">History in English</span>
+            </div>
+            <div class="footer-copyright">
+                © 2025 KOsuji SUNGeunji SHINsanggyu LIMeunhee
+            </div>
+        </div>
+    </main>
+
+    <script src="js/wordbook.js"></script>
+</body>
+</html> 

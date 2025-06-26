@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>워드 디펜스 게임</title>
+    <link rel="icon" type="image/x-icon" href="img/favicon.ico">
+    <link rel="stylesheet" href="css/arrow.css">
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <img src="img/text_logo.png" alt="워드 디펜스" class="header-logo" onclick="window.location.href='index.html'" style="cursor: pointer;">
+        </div>
+        <div class="header-center">
+            <h1 id="pageTitle">성을 지켜라!</h1>
+        </div>
+        <div class="header-right">
+            <button class="nav-button" id="wordbookButton" aria-label="단어장" onclick="window.location.href='wordbook.html'">
+                <span>📚</span>
+            </button>
+            <button class="nav-button" id="targetButton" aria-label="과녁판" onclick="window.location.href='arrow.html'">
+                <span>🎯</span>
+            </button>
+            <button class="mypage-button" id="mypageButton" aria-label="마이페이지" onclick="window.location.href='mypage.html'">
+                <span>👤</span>
+            </button>
+            <button class="theme-toggle" id="themeToggle" aria-label="테마 변경">
+                <span id="themeIcon">🌙</span>
+            </button>
+        </div>
+    </header>
+
+    <div class="game-container" id="gameContainer">
+        <img src="img/archer.png" alt="궁수" class="archer">
+        
+        <!-- 체력 하트 -->
+        <div class="hearts-container" id="heartsContainer">
+            <div class="heart">❤️</div>
+            <div class="heart">❤️</div>
+            <div class="heart">❤️</div>
+            <div class="heart">❤️</div>
+            <div class="heart">❤️</div>
+        </div>
+        
+        <!-- 점수 표시 -->
+        <div class="score-display" id="scoreDisplay">점수: 0</div>
+        
+        <!-- 마이크 상태 -->
+        <div class="mic-status" id="micStatus">
+            <div class="mic-indicator" id="micIndicator"></div>
+            <span id="micText">마이크: 준비 중</span>
+        </div>
+        
+        <!-- 음성 입력 상태 (궁수 아래) -->
+        <div class="voice-input-display">
+            <div class="voice-input-title">🎙️ 음성 인식</div>
+            <div class="voice-input-text" id="voiceInputText">음성 인식 대기 중...</div>
+            <div class="recent-words-section">
+                <div class="voice-engine-status" id="voiceEngineStatus">엔진: Web Speech API</div>
+                <div class="recent-words-title">실시간 음성 스트림</div>
+                <div class="recent-words-container" id="recentWordsContainer">
+                    <!-- 실시간 음성 스트림이 JavaScript로 동적 생성됨 -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 게임 오버 모달 -->
+    <div class="game-over-modal" id="gameOverModal">
+        <div class="modal-content">
+            <h2>게임 오버!</h2>
+            <p id="finalScore">최종 점수: 0</p>
+            <p id="wordsDestroyed">파괴한 단어: 0개</p>
+            <button class="restart-btn" onclick="restartGame()">다시 시작</button>
+        </div>
+    </div>
+
+    <!-- 로딩 화면 -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-text" id="loadingText">음성 인식 초기화 중...</div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <p style="font-size: 14px; color: #ccc;">Web Speech API를 사용한 음성 인식</p>
+        <button class="start-btn" id="startButton">게임 시작</button>
+    </div>
+
+    <script src="js/arrow.js"></script>
+</body>
+</html> 

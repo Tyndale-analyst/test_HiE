@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>한국사 오디오북</title>
+    <link rel="icon" type="image/x-icon" href="img/favicon.ico">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <img src="img/text_logo.png" alt="한국사 오디오북" class="header-logo" onclick="window.location.href='index.html'" style="cursor: pointer;">
+        </div>
+        <div class="header-center">
+            <h1 id="pageTitle">이야기 선택</h1>
+        </div>
+        <div class="header-right">
+            <button class="nav-button" id="wordbookButton" aria-label="단어장" onclick="window.location.href='wordbook.html'">
+                <span>📚</span>
+            </button>
+            <button class="nav-button" id="targetButton" aria-label="과녁판" onclick="window.location.href='arrow.html'">
+                <span>🎯</span>
+            </button>
+            <button class="mypage-button" id="mypageButton" aria-label="마이페이지" onclick="window.location.href='mypage.html'">
+                <span>👤</span>
+            </button>
+            <button class="theme-toggle" id="themeToggle" aria-label="테마 변경">
+                <span id="themeIcon">🌙</span>
+            </button>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="sidebar" id="sidebar">
+            <div class="timeline-header">
+                <div class="timeline-title">시대별 탐색</div>
+            </div>
+            <div class="timeline" id="timeline">
+                <!-- 메뉴는 JavaScript로 동적 생성 -->
+            </div>
+        </div>
+        
+        <!-- 토글 버튼을 사이드바 밖으로 분리 -->
+        <button class="sidebar-toggle" id="sidebarToggle" aria-label="메뉴 닫기">
+            ◀
+        </button>
+        
+        <div class="map-container">
+            <div class="map-wrapper">
+                <img src="img/Korean_map.png" alt="한국 지도" class="map-image" id="koreaMap">
+                <!-- 지도 핀들이 JavaScript로 추가됨 -->
+            </div>
+        </div>
+        
+        <!-- 오른쪽 사이드바 -->
+        <div class="right-sidebar" id="rightSidebar">
+            <div class="right-sidebar-content">
+                <!-- 단어장 모듈 -->
+                <div class="module-placeholder">
+                    <h3 class="module-title">단어장</h3>
+                    <div class="word-list-container" id="wordListContainer">
+                        <div class="word-item">Loading...</div>
+                        <div class="word-item">Loading...</div>
+                        <div class="word-item">Loading...</div>
+                    </div>
+                    <button class="word-module-button" onclick="window.location.href='wordbook.html'">
+                        단어장으로 이동
+                    </button>
+                </div>
+                <!-- 최근 오디오북 모듈 -->
+                <div class="recent-audiobooks">
+                    <h3 class="module-title">최근 오디오북</h3>
+                    <div class="recent-list" id="recentList">
+                        <div class="recent-item" data-category="부족연맹사회" data-item="원삼국시대" data-title="부여와 5부족">
+                            <div class="recent-category">[부족연맹사회] - [원삼국시대]</div>
+                            <div class="recent-title">부여와 5부족</div>
+                        </div>
+                        <div class="recent-item" data-category="선사시대" data-item="청동기" data-title="청동 거울의 힘">
+                            <div class="recent-category">[선사시대] - [청동기]</div>
+                            <div class="recent-title">청동 거울의 힘</div>
+                        </div>
+                        <div class="recent-item" data-category="선사시대" data-item="신석기" data-title="환웅과 웅녀">
+                            <div class="recent-category">[선사시대] - [신석기]</div>
+                            <div class="recent-title">환웅과 웅녀</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 광고 모듈 -->
+                <div class="module-placeholder">
+                    <a href="https://www.milkt.co.kr/Main/Main_new" target="_blank" rel="noopener">
+                        <img src="img/banner_ad.jpg" alt="배너 광고" class="banner-ad">
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 오른쪽 사이드바 토글 버튼 -->
+        <button class="right-sidebar-toggle" id="rightSidebarToggle" aria-label="학습 정보 닫기">
+            ▶
+        </button>
+    </main>
+
+    <!-- 페이지 하단 정보 -->
+    <div class="page-footer">
+        <div class="footer-links">
+            <a href="#" class="footer-link">개인정보 보호</a>
+            <a href="#" class="footer-link">이용 약관</a>
+            <a href="#" class="footer-link">건의사항 및 신고</a>
+        </div>
+        <div class="footer-logo">
+            <span class="logo-text">History in English</span>
+        </div>
+        <div class="footer-copyright">
+            © 2025 KOsuji SUNGeunji SHINsanggyu LIMeunhee
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

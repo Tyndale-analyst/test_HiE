@@ -1,0 +1,637 @@
+/* CSS Variables for consistent theming */
+:root {
+    --primary-color: #E67300;
+    --primary-dark: #E67300;
+    --secondary-color: #f4f4f4;
+    --accent-color: #2c3e50;
+    --text-color: #333;
+    --background-color: #ffffff;
+    --card-bg: #ffffff;
+    --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --border-radius: 12px;
+    --transition: all 0.3s ease;
+    --light-orange: #FFF4E6;
+    --border-color: #e9ecef;
+    --header-bg: #E67300;
+}
+
+[data-theme="dark"] {
+    --primary-color: #E67300;
+    --primary-dark: #E67300;
+    --secondary-color: #2c3e50;
+    --accent-color: #ecf0f1;
+    --text-color: #ecf0f1;
+    --background-color: #1a1a1a;
+    --card-bg: #2d2d2d;
+    --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    --light-orange: rgba(230, 115, 0, 0.1);
+    --border-color: #404040;
+    --header-bg: #E67300;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    min-height: 100vh;
+    transition: var(--transition);
+}
+
+/* Header - 기존 스타일 유지 */
+header {
+    background-color: var(--header-bg);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    position: relative;
+    z-index: 1000;
+    height: 90px;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+}
+
+.header-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+}
+
+#pageTitle {
+    color: white;
+    font-size: 2rem;
+    font-weight: 600;
+    font-family: 'Segoe UI';
+    margin: 0;
+}
+
+.header-logo {
+    height: 54px;
+    width: auto;
+    max-width: 200px;
+    object-fit: contain;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.mypage-button,
+.theme-toggle,
+.nav-button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mypage-button:hover,
+.theme-toggle:hover,
+.nav-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+}
+
+.mypage-button span,
+.theme-toggle span,
+.nav-button span {
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+.mypage-button:hover span,
+.theme-toggle:hover span,
+.nav-button:hover span {
+    transform: rotate(10deg);
+}
+
+/* Main Content */
+main {
+    max-width: 1000px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+/* Section Headers */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.section-header h2 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.section-button {
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    transition: var(--transition);
+}
+
+.section-button:hover {
+    background-color: var(--light-orange);
+}
+
+/* Current Book Section */
+.current-book-section {
+    margin-bottom: 3rem;
+}
+
+.main-content-wrapper {
+    display: flex;
+    gap: 2rem;
+    align-items: stretch;
+}
+
+/* Profile Section */
+.profile-section {
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--card-shadow);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    min-width: 200px;
+    border: 2px solid var(--light-orange);
+}
+
+.profile-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: var(--light-orange);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+}
+
+.avatar-image {
+    width: 60%;
+    height: 60%;
+    object-fit: contain;
+    filter: brightness(1.2);
+}
+
+.profile-info {
+    text-align: center;
+}
+
+.nickname {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+}
+
+.current-book-card {
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--card-shadow);
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    border: 2px solid var(--light-orange);
+    flex: 1;
+}
+
+.book-info {
+    margin-right: 20px;
+}
+
+.current-book-header {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+    opacity: 0.8;
+}
+
+.book-title-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.book-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 0;
+}
+
+.book-description {
+    font-size: 1.1rem;
+    color: var(--text-color);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    opacity: 0.8;
+}
+
+.progress-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.progress-label {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--primary-color);
+}
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background-color: var(--border-color);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary-color), #FF8C42);
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+.continue-reading-btn {
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    transition: var(--transition);
+    margin-top: 0;
+    flex-shrink: 0;
+}
+
+.continue-reading-btn:hover {
+    background-color: var(--light-orange);
+    transform: none;
+    box-shadow: none;
+}
+
+.book-character {
+    flex: 0 0 auto;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.character-image {
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+    z-index: 2;
+    transform: translateX(-20px);
+}
+
+.record-image {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    position: absolute;
+    right: -20px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+    opacity: 0.8;
+}
+
+/* Vocabulary Section */
+.vocabulary-section {
+    margin-bottom: 3rem;
+}
+
+.vocabulary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.vocab-card {
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--card-shadow);
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border: 1px solid var(--border-color);
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.vocab-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.vocab-icon {
+    font-size: 2rem;
+    flex: 0 0 auto;
+}
+
+.vocab-content {
+    flex: 1;
+}
+
+.vocab-english {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 0.25rem;
+}
+
+.vocab-korean {
+    font-size: 1rem;
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+/* Audiobook Collection */
+.audiobook-collection {
+    margin-bottom: 3rem;
+}
+
+.audiobook-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.audiobook-item {
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--card-shadow);
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.audiobook-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.audiobook-thumbnail {
+    height: 120px;
+    background: linear-gradient(135deg, var(--light-orange), #FFF8F0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.audiobook-thumbnail img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.audiobook-info {
+    padding: 1.5rem;
+}
+
+.audiobook-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+}
+
+.audiobook-category {
+    font-size: 0.9rem;
+    color: var(--primary-color);
+    font-weight: 500;
+    margin-bottom: 0.75rem;
+}
+
+.audiobook-description {
+    font-size: 0.95rem;
+    color: var(--text-color);
+    opacity: 0.7;
+    line-height: 1.5;
+}
+
+/* Page Footer */
+.page-footer {
+    margin-top: 4rem;
+    padding: 2rem 0;
+    border-top: 1px solid var(--border-color);
+    text-align: center;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 1rem;
+}
+
+.footer-link {
+    color: var(--text-color);
+    text-decoration: none;
+    font-size: 0.9rem;
+    opacity: 0.7;
+    transition: var(--transition);
+}
+
+.footer-link:hover {
+    opacity: 1;
+    color: var(--primary-color);
+}
+
+.footer-logo {
+    margin-bottom: 1rem;
+}
+
+.logo-text {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    font-style: italic;
+}
+
+.footer-copyright {
+    font-size: 0.8rem;
+    color: var(--text-color);
+    opacity: 0.5;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    main {
+        max-width: 100%;
+        padding: 0 0.5rem;
+        margin: 1rem auto;
+    }
+
+    header {
+        padding: 0.5rem 1rem;
+        height: 70px;
+    }
+
+    #pageTitle {
+        font-size: 1.5rem;
+    }
+
+    .header-right {
+        gap: 0.5rem;
+    }
+
+    .mypage-button,
+    .theme-toggle,
+    .nav-button {
+        width: 36px;
+        height: 36px;
+        font-size: 1.2rem;
+    }
+
+    .title-icon {
+        width: 30px;
+        height: 30px;
+    }
+
+    .main-content-wrapper {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .profile-section {
+        flex-direction: row;
+        padding: 1.5rem;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 1.5rem;
+        min-width: auto;
+        width: 100%;
+    }
+
+    .profile-avatar {
+        width: 60px;
+        height: 60px;
+    }
+
+    .profile-info {
+        text-align: left;
+    }
+
+    .nickname {
+        font-size: 1.2rem;
+    }
+
+    .current-book-card {
+        flex-direction: column;
+        text-align: center;
+        padding: 1.5rem;
+    }
+
+    .book-character {
+        order: -1;
+        margin-bottom: 1rem;
+    }
+
+    .character-image {
+        width: 100px;
+        height: 100px;
+    }
+
+    .record-image {
+        width: 60px;
+        height: 60px;
+        right: -15px;
+    }
+
+    .vocabulary-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .audiobook-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .footer-links {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .footer-links {
+        gap: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .vocab-card {
+        padding: 1rem;
+    }
+
+    .vocab-icon {
+        font-size: 1.5rem;
+    }
+
+    .vocab-english {
+        font-size: 1.1rem;
+    }
+
+    .audiobook-info {
+        padding: 1rem;
+    }
+
+    .audiobook-title {
+        font-size: 1.2rem;
+    }
+} 

@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>오디오북</title>
+    <link rel="icon" type="image/png" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎧</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=East+Sea+Dokdo&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/audiobook.css">
+    <style>
+        /* 디버깅용 인라인 스타일 */
+        .auto-play-button {
+            background: linear-gradient(135deg, #E67300, #ff8c42) !important;
+            color: white !important;
+            border: none !important;
+            border-radius: 8px !important;
+            padding: 0.5rem 1rem !important;
+            font-size: 0.9rem !important;
+            font-weight: 500 !important;
+            cursor: pointer !important;
+            transition: all 0.3s ease !important;
+            box-shadow: 0 2px 4px rgba(230, 115, 0, 0.3) !important;
+            white-space: nowrap !important;
+            flex-shrink: 0 !important;
+            position: relative !important;
+            z-index: 1 !important;
+        }
+        
+        .auto-play-button:hover {
+            transform: translateY(-1px) !important;
+            box-shadow: 0 4px 8px rgba(230, 115, 0, 0.4) !important;
+            background: linear-gradient(135deg, #ff8c42, #E67300) !important;
+        }
+        
+        .auto-play-button.auto-playing {
+            background: linear-gradient(135deg, #b8570a, #d35400) !important;
+            box-shadow: 0 4px 12px rgba(230, 115, 0, 0.5) !important;
+            animation: pulse-glow 2s infinite !important;
+            z-index: 1 !important;
+        }
+        
+        .auto-play-button.auto-playing::before {
+            display: none !important;
+        }
+        
+        .auto-play-button.auto-playing::after {
+            content: '' !important;
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
+            background: linear-gradient(135deg, #d35400, #e67e22) !important;
+            border-radius: 8px !important;
+            z-index: -1 !important;
+        }
+        
+        @keyframes pulse-glow {
+            0% { 
+                opacity: 1;
+                box-shadow: 0 4px 12px rgba(230, 115, 0, 0.5);
+            }
+            50% { 
+                opacity: 0.9;
+                box-shadow: 0 6px 20px rgba(230, 115, 0, 0.7);
+            }
+            100% { 
+                opacity: 1;
+                box-shadow: 0 4px 12px rgba(230, 115, 0, 0.5);
+            }
+        }
+        
+        @keyframes move-around-border {
+            0% {
+                top: -6px !important;
+                left: calc(50% - 3px) !important;
+            }
+            12.5% {
+                top: calc(12.5% - 3px) !important;
+                left: calc(100% + 3px) !important;
+            }
+            25% {
+                top: calc(50% - 3px) !important;
+                left: calc(100% + 3px) !important;
+            }
+            37.5% {
+                top: calc(87.5% - 3px) !important;
+                left: calc(100% + 3px) !important;
+            }
+            50% {
+                top: calc(100% + 3px) !important;
+                left: calc(50% - 3px) !important;
+            }
+            62.5% {
+                top: calc(87.5% - 3px) !important;
+                left: -6px !important;
+            }
+            75% {
+                top: calc(50% - 3px) !important;
+                left: -6px !important;
+            }
+            87.5% {
+                top: calc(12.5% - 3px) !important;
+                left: -6px !important;
+            }
+            100% {
+                top: -6px !important;
+                left: calc(50% - 3px) !important;
+            }
+        }
+        
+        /* 뒤로가기 버튼 수정 */
+        .back-button {
+            background: none !important;
+            border: none !important;
+            color: white !important;
+            font-size: 2rem !important;
+            cursor: pointer !important;
+            padding: 8px !important;
+            border-radius: 50% !important;
+            transition: all 0.3s ease !important;
+            width: 44px !important;
+            height: 44px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+        }
+        
+        /* 모든 버튼이 기본 스타일을 가지도록 강제 */
+        button {
+            font-family: inherit !important;
+        }
+        
+        /* 재생 버튼 폰트 크기 조정 */
+        .play-button {
+            font-size: 1.4rem !important;
+        }
+        
+        /* 모바일 레이아웃 조정 */
+        @media (max-width: 768px) {
+            .center-controls {
+                display: flex !important;
+                align-items: center !important;
+                justify-content: space-between !important;
+                width: 100% !important;
+                padding: 0 !important;
+                gap: 1rem !important;
+            }
+            
+            .auto-play-button {
+                font-size: 0.8rem !important;
+                padding: 0.5rem 0.8rem !important;
+                flex: 0 0 auto !important;
+                white-space: nowrap !important;
+            }
+            
+            .play-button {
+                width: 45px !important;
+                height: 45px !important;
+                font-size: 1.2rem !important;
+                flex: 0 0 auto !important;
+            }
+            
+            .speed-control {
+                flex: 0 0 auto !important;
+                max-width: none !important;
+                min-width: 0 !important;
+                display: flex !important;
+                align-items: center !important;
+                gap: 0.5rem !important;
+            }
+            
+            .speed-control label {
+                font-size: 0.85rem !important;
+                white-space: nowrap !important;
+                flex-shrink: 0 !important;
+            }
+            
+            #speedSlider {
+                width: 100px !important;
+                min-width: 100px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <img src="img/text_logo.png" alt="한국사 오디오북" class="header-logo" onclick="window.location.href='index.html'" style="cursor: pointer;">
+        </div>
+        <div class="header-center">
+            <h1 id="pageTitle">오디오북</h1>
+        </div>
+        <div class="header-right">
+            <button class="nav-button" id="wordbookButton" aria-label="단어장" onclick="window.location.href='wordbook.html'">
+                <span>📚</span>
+            </button>
+            <button class="nav-button" id="targetButton" aria-label="과녁판" onclick="window.location.href='arrow.html'">
+                <span>🎯</span>
+            </button>
+            <button class="mypage-button" id="mypageButton" aria-label="마이페이지" onclick="window.location.href='mypage.html'">
+                <span>👤</span>
+            </button>
+            <button class="theme-toggle" id="themeToggle" aria-label="테마 변경">
+                <span id="themeIcon">🌙</span>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <div class="main-content-wrapper">
+            <div class="content-container">
+                <div class="progress-voice-container">
+                    <div class="progress-subtitle-group">
+                        <div class="progress-info">
+                            <span id="currentSentence">1</span> / <span id="totalSentences">0</span>
+                        </div>
+                        
+                        <button class="subtitle-toggle" id="subtitleToggle" aria-label="한글자막 토글">
+                            한글자막 OFF
+                        </button>
+                    </div>
+                    
+                    <div class="voice-selector">
+                        <div class="voice-option" id="markVoice" data-voice="mark">
+                            <span class="voice-icon">🙋‍♂️</span>
+                            <span class="voice-name">마크 (남)</span>
+                        </div>
+                        <div class="voice-option" id="susanVoice" data-voice="susan">
+                            <span class="voice-icon">🙋‍♀️</span>
+                            <span class="voice-name">수잔 (여)</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="sentence-card" id="sentenceCard">
+                    <div class="sentence-text" id="sentenceText">
+                        텍스트를 불러오는 중...
+                    </div>
+                </div>
+                
+                <div class="translation-card hidden" id="translationCard">
+                    <div class="translation-text" id="translationText">
+                        번역을 불러오는 중...
+                    </div>
+                </div>
+                
+                <div class="unified-controls">
+                    <div class="nav-buttons-row">
+                        <button class="nav-button left" id="prevButton" aria-label="이전 문장">
+                            <span>⏮</span>
+                            <span>이전</span>
+                        </button>
+                        
+                        <button class="nav-button right" id="nextButton" aria-label="다음 문장">
+                            <span>⏭</span>
+                            <span>다음</span>
+                        </button>
+                    </div>
+                    
+                    <div class="center-controls">
+                        <button class="auto-play-button" id="autoPlayButton" aria-label="자동재생">
+                            자동재생
+                        </button>
+                        
+                        <button class="play-button" id="playButton" aria-label="재생/일시정지">
+                            ▶
+                        </button>
+                        
+                        <div class="speed-control">
+                            <label for="speedSlider">재생 속도: <span id="currentSpeed">1.0x</span></label>
+                            <input type="range" id="speedSlider" min="0.5" max="2.0" step="0.1" value="1.0" 
+                                   aria-label="재생 속도 조절">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="character-images">
+                <img src="img/jumong.png" alt="주몽" class="jumong-image">
+                <img src="img/record.png" alt="레코드" class="record-image">
+            </div>
+        </div>
+        
+        <div class="keyboard-shortcuts">
+            <div class="shortcuts-title">(PC) 키보드 단축키</div>
+            <div class="shortcuts-grid">
+                <div class="shortcut-item">
+                    <kbd>Space</kbd> <span>재생/일시정지</span>
+                </div>
+                <div class="shortcut-item">
+                    <kbd>←</kbd> <span>이전 문장</span>
+                </div>
+                <div class="shortcut-item">
+                    <kbd>→</kbd> <span>다음 문장</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 페이지 하단 정보 -->
+        <div class="page-footer">
+            <div class="footer-links">
+                <a href="#" class="footer-link">개인정보 보호</a>
+                <a href="#" class="footer-link">이용 약관</a>
+                <a href="#" class="footer-link">건의사항 및 신고</a>
+            </div>
+            <div class="footer-logo">
+                <span class="logo-text">History in English</span>
+            </div>
+            <div class="footer-copyright">
+                © 2025 KOsuji SUNGeunji SHINsanggyu LIMeunhee
+            </div>
+        </div>
+    </main>
+
+    <script src="js/audiobook.js"></script>
+</body>
+</html>
+
