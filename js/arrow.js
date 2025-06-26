@@ -3,6 +3,7 @@ const gameState = {
     gameRunning: false,
     score: 0,
     lives: 5,
+    currentLevel: 1, // 현재 레벨 (1-9)
     words: [],
     wordsDestroyed: 0,
     wordList: [],
@@ -12,23 +13,17 @@ const gameState = {
     speechRecognition: null,
     speechStream: [], // 실시간 음성 스트림 단어 배열
     wordMap: new Map(), // 단어별 스파이크 빠른 검색용
-    lastVolumeUpdate: 0 // 볼륨 업데이트 스로틀링용
+    lastVolumeUpdate: 0, // 볼륨 업데이트 스로틀링용
+    levelChangeTime: 0, // 레벨 변경 시간 기록
+    spikePaused: false, // 스파이크 생성 일시정지 플래그
+    lastLevelChangeTime: 0 // 레벨 변경 디바운싱용
 };
 
-// DOM 요소 참조
-const gameContainer = document.getElementById('gameContainer');
-const scoreDisplay = document.getElementById('scoreDisplay');
-const heartsContainer = document.getElementById('heartsContainer');
-const micStatus = document.getElementById('micStatus');
-const micText = document.getElementById('micText');
-const micIndicator = document.getElementById('micIndicator');
-const gameOverModal = document.getElementById('gameOverModal');
-const loadingScreen = document.getElementById('loadingScreen');
-const loadingText = document.getElementById('loadingText');
-const progressFill = document.getElementById('progressFill');
-const startButton = document.getElementById('startButton');
-const voiceInputText = document.getElementById('voiceInputText');
-const voiceEngineStatus = document.getElementById('voiceEngineStatus');
+// DOM 요소 참조 - DOMContentLoaded 이후에 초기화됨
+let gameContainer, scoreDisplay, heartsContainer, levelContainer, levelDisplay;
+let levelDownBtn, levelUpBtn, micStatus, micText, micIndicator;
+let gameOverModal, loadingScreen, loadingText, progressFill, startButton;
+let voiceInputText, voiceEngineStatus;
 
 // 다크 모드 토글
 function toggleTheme() {
@@ -44,10 +39,120 @@ document.documentElement.setAttribute('data-theme', savedTheme);
 
 // 테마 토글 버튼 이벤트 리스너 추가
 document.addEventListener('DOMContentLoaded', () => {
+    // DOM 요소 참조 초기화
+    gameContainer = document.getElementById('gameContainer');
+    scoreDisplay = document.getElementById('scoreDisplay');
+    heartsContainer = document.getElementById('heartsContainer');
+    levelContainer = document.getElementById('levelContainer');
+    levelDisplay = document.getElementById('levelDisplay');
+    levelDownBtn = document.getElementById('levelDownBtn');
+    levelUpBtn = document.getElementById('levelUpBtn');
+    micStatus = document.getElementById('micStatus');
+    micText = document.getElementById('micText');
+    micIndicator = document.getElementById('micIndicator');
+    gameOverModal = document.getElementById('gameOverModal');
+    loadingScreen = document.getElementById('loadingScreen');
+    loadingText = document.getElementById('loadingText');
+    progressFill = document.getElementById('progressFill');
+    startButton = document.getElementById('startButton');
+    voiceInputText = document.getElementById('voiceInputText');
+    voiceEngineStatus = document.getElementById('voiceEngineStatus');
+
     const themeToggleButton = document.querySelector('.theme-toggle');
     if (themeToggleButton) {
         themeToggleButton.addEventListener('click', toggleTheme);
     }
+    
+    // 레벨 버튼 이벤트 리스너 설정
+    if (levelDownBtn) {
+        // 모든 이벤트 감지
+        ['click', 'mousedown', 'mouseup', 'touchstart', 'touchend', 'pointerdown', 'pointerup'].forEach(eventType => {
+            levelDownBtn.addEventListener(eventType, (e) => {
+                if (eventType === 'click' || eventType === 'pointerdown') {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    e.stopImmediatePropagation();
+                    
+                    decreaseDifficulty();
+                }
+            }, true);
+        });
+        
+        levelDownBtn.addEventListener('mouseover', () => {
+            levelDownBtn.style.background = 'rgba(255, 255, 255, 0.5)';
+        });
+        
+        levelDownBtn.addEventListener('mouseout', () => {
+            levelDownBtn.style.background = 'rgba(255, 255, 255, 0.2)';
+        });
+        
+    } else {
+        console.error('❌ levelDownBtn을 찾을 수 없습니다!');
+    }
+    
+    if (levelUpBtn) {
+        // 모든 이벤트 감지
+        ['click', 'mousedown', 'mouseup', 'touchstart', 'touchend', 'pointerdown', 'pointerup'].forEach(eventType => {
+            levelUpBtn.addEventListener(eventType, (e) => {
+                if (eventType === 'click' || eventType === 'pointerdown') {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    e.stopImmediatePropagation();
+                    
+                    increaseDifficulty();
+                }
+            }, true);
+        });
+        
+        levelUpBtn.addEventListener('mouseover', () => {
+            levelUpBtn.style.background = 'rgba(255, 255, 255, 0.5)';
+        });
+        
+        levelUpBtn.addEventListener('mouseout', () => {
+            levelUpBtn.style.background = 'rgba(255, 255, 255, 0.2)';
+        });
+        
+    } else {
+        console.error('❌ levelUpBtn을 찾을 수 없습니다!');
+    }
+    
+    // 초기 레벨 표시
+    updateLevelDisplay();
+    
+    console.log('✅ DOM 요소들과 이벤트 리스너 초기화 완료');
+    console.log('🎯 gameState.gameRunning:', gameState.gameRunning);
+    
+    // 콘솔 테스트용 글로벌 함수들 등록
+    window.testLevelUp = () => {
+        console.log('🧪 콘솔에서 레벨 업 테스트');
+        increaseDifficulty();
+    };
+    
+    window.testLevelDown = () => {
+        console.log('🧪 콘솔에서 레벨 다운 테스트');
+        decreaseDifficulty();
+    };
+    
+    window.testButtonClick = () => {
+        console.log('🧪 콘솔에서 버튼 클릭 테스트');
+        if (levelUpBtn) {
+            console.log('levelUpBtn 찾음, 강제 클릭 시도...');
+            levelUpBtn.click();
+        }
+        if (levelDownBtn) {
+            console.log('levelDownBtn 찾음, 강제 클릭 시도...');
+            levelDownBtn.click();
+        }
+    };
+    
+    window.checkGameState = () => {
+        console.log('🔍 현재 게임 상태:');
+        console.log('- gameRunning:', gameState.gameRunning);
+        console.log('- currentLevel:', gameState.currentLevel);
+        console.log('- levelUpBtn:', levelUpBtn);
+        console.log('- levelDownBtn:', levelDownBtn);
+        console.log('- levelDisplay:', levelDisplay);
+    };
 });
 
 // CSV에서 단어 목록 로드
@@ -460,69 +565,76 @@ function destroyWordSpike(wordSpike, index) {
 
 // 게임 시작
 async function startGame() {
+    console.log('🎮 게임 시작!');
+    
+    // 게임 상태 초기화
     gameState.gameRunning = true;
     gameState.score = 0;
     gameState.lives = 5;
     gameState.words = [];
     gameState.wordsDestroyed = 0;
-    gameState.speechStream = []; // 음성 스트림 초기화
-    gameState.wordMap.clear(); // wordMap 초기화
+    gameState.wordMap.clear();
     
+    // 레벨 표시 업데이트 (버튼은 항상 활성화 상태 유지)
+    updateLevelDisplay();
+    
+    // UI 업데이트
     updateScore();
     updateHearts();
-    updateSpeechStreamDisplay(); // 음성 스트림 표시 초기화
     
-    // 음성 입력 표시 초기화
-    if (gameState.speechRecognition && gameState.micPermissionGranted) {
-        voiceInputText.textContent = '음성 인식 대기 중...';
-        voiceInputText.style.color = 'white';
-    } else {
-        voiceInputText.textContent = '키보드로 단어 입력 (Enter/Space로 확인)';
-        voiceInputText.style.color = '#00aaff';
-    }
+    // 모달 숨기기
+    loadingScreen.style.display = 'none';
     
-    // 음성 인식 시작 (사용 가능한 경우만)
-    if (gameState.speechRecognition && gameState.micPermissionGranted) {
+    // 음성 스트림 초기화
+    gameState.speechStream = [];
+    updateSpeechStreamDisplay();
+    
+    // 기존에 있던 스파이크들 모두 제거
+    const existingSpikes = document.querySelectorAll('.word-spike');
+    existingSpikes.forEach(spike => spike.remove());
+    
+    // 음성 입력 상태 초기화
+    voiceInputText.textContent = '음성 인식 대기 중...';
+    voiceInputText.style.color = 'white';
+    
+    // 마이크 및 음성 인식 시작
+    if (gameState.micPermissionGranted && gameState.speechRecognition) {
         try {
-            console.log('🚀 Web Speech API 시작...');
             gameState.speechRecognition.start();
-            micText.textContent = 'Web Speech: 활성';
+            micText.textContent = '마이크: 활성';
             micIndicator.classList.add('active');
-            voiceEngineStatus.textContent = '엔진: Web Speech API 🎤';
-            console.log('🎤 Web Speech API 음성 인식 시작됨');
+            console.log('🎤 음성 인식 시작됨');
         } catch (error) {
             console.error('❌ 음성 인식 시작 실패:', error);
-            micText.textContent = '마이크: 오류 발생';
-            voiceEngineStatus.textContent = `엔진: 시작 실패 - ${error.message}`;
-            voiceEngineStatus.className = 'voice-engine-status error';
-            
-            // 음성 인식 실패해도 게임은 계속 진행
-            voiceInputText.textContent = '음성 인식 비활성화됨 (수동 플레이)';
-            voiceInputText.style.color = '#ffaa00';
+            micText.textContent = '마이크: 오류';
         }
     } else {
-        // 음성 인식이 사용 불가능한 경우
-        console.log('🔇 음성 인식 비활성화 상태로 게임 시작');
-        micText.textContent = '마이크: 비활성화';
-        micIndicator.classList.remove('active');
-        voiceEngineStatus.textContent = '엔진: 키보드 입력 모드';
-        voiceEngineStatus.className = 'voice-engine-status fallback';
-        voiceInputText.textContent = '키보드로 단어 입력 (Enter/Space로 확인)';
-        voiceInputText.style.color = '#00aaff';
+        console.log('⌨️ 키보드 입력 모드로 시작 (음성 인식 비활성화)');
+        micText.textContent = '마이크: 비활성 (키보드 입력 모드)';
+        voiceInputText.textContent = '키보드로 단어 입력 중...';
     }
     
-    // 단어 생성 시작
-    spawnWordLoop();
+    // 단어 스폰 루프 시작
+    setTimeout(() => {
+        spawnWordLoop();
+    }, 2000); // 2초 후 첫 단어 생성
 }
 
 // 단어 생성 루프
 function spawnWordLoop() {
     if (!gameState.gameRunning) return;
     
+    // 스파이크 생성이 일시정지된 경우 스킵
+    if (gameState.spikePaused) {
+        const nextSpawnTime = getNextSpawnTime(gameState.currentLevel);
+        setTimeout(spawnWordLoop, nextSpawnTime);
+        return;
+    }
+    
     createWordSpike();
     
-    // 4-10초 간격으로 새 단어 생성 (기존 2-5초에서 반으로 줄임)
-    const nextSpawnTime = 4000 + Math.random() * 6000;
+    // 레벨별 스폰 시간 적용
+    const nextSpawnTime = getNextSpawnTime(gameState.currentLevel);
     setTimeout(spawnWordLoop, nextSpawnTime);
 }
 
@@ -733,50 +845,49 @@ function restartGame() {
             wordSpike.element.parentNode.removeChild(wordSpike.element);
         }
     });
-    
-    // 상태 초기화
     gameState.words = [];
     gameState.wordMap.clear();
     
-    // 게임 시작
-    startGame();
-}
-
-// 실시간 음성 스트림에 단어 추가 (텍스트박스 방식)
-function addToSpeechStream(word) {
-    if (!word || word.length < 2) return;
+    // 게임 상태 초기화
+    gameState.gameRunning = true; // 게임 실행 상태로 변경
+    gameState.score = 0;
+    gameState.lives = 5;
+    gameState.wordsDestroyed = 0;
+    gameState.currentLevel = 1; // 레벨을 1로 리셋
     
-    gameState.speechStream.push(word);
+    // UI 업데이트
+    updateScore();
+    updateHearts();
+    updateLevelDisplay(); // 레벨 표시 업데이트
     
-    // 텍스트박스가 너무 길어지면 (30개 단어 초과) 처음 단어들 제거
-    const maxWords = 30;
-    if (gameState.speechStream.length > maxWords) {
-        const removeCount = gameState.speechStream.length - maxWords;
-        gameState.speechStream.splice(0, removeCount);
+    // 음성 스트림 초기화
+    gameState.speechStream = [];
+    updateSpeechStreamDisplay();
+    
+    // 음성 입력 상태 초기화
+    voiceInputText.textContent = '음성 인식 대기 중...';
+    voiceInputText.style.color = 'white';
+    
+    // 마이크 및 음성 인식 재시작
+    if (gameState.micPermissionGranted && gameState.speechRecognition) {
+        try {
+            gameState.speechRecognition.start();
+            micText.textContent = '마이크: 활성';
+            micIndicator.classList.add('active');
+            console.log('🎤 음성 인식 재시작됨');
+        } catch (error) {
+            console.error('❌ 음성 인식 재시작 실패:', error);
+            micText.textContent = '마이크: 오류';
+        }
+    } else {
+        console.log('⌨️ 키보드 입력 모드로 재시작');
+        micText.textContent = '마이크: 비활성 (키보드 입력 모드)';
+        voiceInputText.textContent = '키보드로 단어 입력 중...';
     }
     
-    // DOM 업데이트를 다음 프레임으로 지연 (배칭)
-    requestAnimationFrame(updateSpeechStreamDisplay);
-}
-
-// 음성 스트림에서 단어 교체 (매칭 성공시)
-function replaceInSpeechStream(oldWord, newWord) {
-    const lastIndex = gameState.speechStream.lastIndexOf(oldWord);
-    if (lastIndex !== -1) {
-        gameState.speechStream[lastIndex] = newWord;
-        
-        // DOM 업데이트
-        requestAnimationFrame(updateSpeechStreamDisplay);
-        
-        // 2초 후 성공 표시 제거
-        setTimeout(() => {
-            const successIndex = gameState.speechStream.indexOf(newWord);
-            if (successIndex !== -1) {
-                gameState.speechStream.splice(successIndex, 1);
-                updateSpeechStreamDisplay();
-            }
-        }, 2000);
-    }
+    setTimeout(() => {
+        spawnWordLoop();
+    }, 2000);
 }
 
 // 음성 스트림 표시 업데이트 (텍스트박스 형태)
@@ -808,6 +919,29 @@ function updateSpeechStreamDisplay() {
     
     // 스크롤을 맨 아래로 (가장 최신 단어가 보이도록)
     container.scrollTop = container.scrollHeight;
+}
+
+// 음성 스트림에 단어 추가
+function addToSpeechStream(word) {
+    if (!word || word.trim().length === 0) return;
+    
+    gameState.speechStream.push(word.trim());
+    
+    // 최대 20개 단어만 유지
+    if (gameState.speechStream.length > 20) {
+        gameState.speechStream.shift();
+    }
+    
+    updateSpeechStreamDisplay();
+}
+
+// 음성 스트림에서 단어 교체
+function replaceInSpeechStream(oldWord, newWord) {
+    const index = gameState.speechStream.lastIndexOf(oldWord);
+    if (index !== -1) {
+        gameState.speechStream[index] = newWord;
+        updateSpeechStreamDisplay();
+    }
 }
 
 // 페이지 로드시 게임 초기화
@@ -887,4 +1021,73 @@ document.addEventListener('keydown', (event) => {
         
         event.preventDefault();
     }
-}); 
+});
+
+// 레벨별 nextSpawnTime 계산 함수
+function getNextSpawnTime(level) {
+    switch (level) {
+        case 1: return 5000 + Math.random() * 5000;
+        case 2: return 4000 + Math.random() * 5000;
+        case 3: return 4000 + Math.random() * 4000;
+        case 4: return 3000 + Math.random() * 4000;
+        case 5: return 3000 + Math.random() * 3000;
+        case 6: return 2000 + Math.random() * 3000;
+        case 7: return 2000 + Math.random() * 2000;
+        case 8: return 1000 + Math.random() * 2000;
+        case 9: return 1000 + Math.random() * 1000;
+        default: return 5000 + Math.random() * 5000; // 기본값
+    }
+}
+
+// 레벨 관리 함수들
+function updateLevelDisplay() {
+    if (levelDisplay) {
+        levelDisplay.textContent = `Level ${gameState.currentLevel}`;
+    }
+}
+
+function increaseDifficulty() {
+    // 디바운싱: 500ms 내 중복 호출 방지
+    const now = Date.now();
+    if (now - gameState.lastLevelChangeTime < 500) {
+        return;
+    }
+    gameState.lastLevelChangeTime = now;
+    
+    if (gameState.currentLevel < 9) {
+        gameState.currentLevel++;
+        
+        // 레벨 변경 시간 기록 및 스파이크 일시정지
+        gameState.levelChangeTime = Date.now();
+        gameState.spikePaused = true;
+        
+        setTimeout(() => {
+            gameState.spikePaused = false;
+        }, 1000);
+        
+        updateLevelDisplay();
+    }
+}
+
+function decreaseDifficulty() {
+    // 디바운싱: 500ms 내 중복 호출 방지
+    const now = Date.now();
+    if (now - gameState.lastLevelChangeTime < 500) {
+        return;
+    }
+    gameState.lastLevelChangeTime = now;
+    
+    if (gameState.currentLevel > 1) {
+        gameState.currentLevel--;
+        
+        // 레벨 변경 시간 기록 및 스파이크 일시정지
+        gameState.levelChangeTime = Date.now();
+        gameState.spikePaused = true;
+        
+        setTimeout(() => {
+            gameState.spikePaused = false;
+        }, 1000);
+        
+        updateLevelDisplay();
+    }
+} 
